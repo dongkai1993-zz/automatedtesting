@@ -7,8 +7,7 @@ var configuration = {
  
     customLaunchers: {
         Chrome_travis_ci: {
-            base: 'Chrome',
-            flags: ['--no-sandbox']
+            base: 'Chrome'
         }
     },
 };
