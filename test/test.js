@@ -24,9 +24,8 @@
 // var assert = chai.assert;
 // var Wilddog = require('wilddog');
 
-
+describe('API',function(){
 describe('basic', function() {
-    this.timeout(10000);
     it('new a wildodg()', function() {
         var ref = new Wilddog('https://test123.wilddogio.com');
         assert.isNotNull(ref);
@@ -71,7 +70,6 @@ describe('basic', function() {
 });
 
 describe('auth', function() {
-    this.timeout(10000);
     it('authWithCustomToken(token)', function(done) {
         var ref = new Wilddog('https://dongkai.wilddogio.com');
         var token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ2IjowLCJpYXQiOjE0OTk5OTk5OTksImQiOnsidWlkIjoic2ltcGxlbG9naW46MTQ1Mjc2MzE2OTc2MTU4NiIsInByb3ZpZGVyIjoicGFzc3dvcmQifX0.el8vvz_7RPizoPlfzlauKRyTwnOnNPdfUntEvQeyIzA';
@@ -225,7 +223,6 @@ describe('auth', function() {
 });
 
 describe('set()', function() {
-    this.timeout(10000);
 
     it('set(Number)', function(done) {
         var ref = new Wilddog('https://test123.wilddogio.com/set/number');
@@ -1176,3 +1173,4 @@ describe('Wilddog.ServerValue(Constants)', function() {
 //                 });
 //         })
 //     })
+})
