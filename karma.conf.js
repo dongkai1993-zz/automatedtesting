@@ -2,27 +2,22 @@
 // Generated on Mon Jan 25 2016 17:27:19 GMT+0800 (CST)
 
 module.exports = function(config) {
-  config.set({
-
-        // ... your default content
-
-        // This is the new content for your travis-ci configuration test
-        //  Custom launcher for Travis-CI
-        customLaunchers: {
-            Chrome_travis_ci: {
-                base: 'Chrome',
-                flags: ['--no-sandbox']
-            }
-        },
-
-        // Continuous Integration mode
-        // if true, it capture browsers, run tests and exit
-        singleRun: true 
-    });
-
-    if(process.env.TRAVIS){
-        config.browsers = ['Chrome_travis_ci'];
-    }
+var configuration = {
+    // other things
+ 
+    customLaunchers: {
+        Chrome_travis_ci: {
+            base: 'Chrome',
+            flags: ['--no-sandbox']
+        }
+    },
+};
+ 
+if (process.env.TRAVIS) {
+    configuration.browsers = ['Chrome_travis_ci'];
+}
+ 
+config.set(configuration);
   config.set({
 
     // base path that will be used to resolve all patterns (eg. files, exclude)
