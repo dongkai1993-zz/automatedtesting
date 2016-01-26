@@ -25,6 +25,7 @@
 // var Wilddog = require('wilddog');
 
 describe('API',function(){
+    this.timeout(10000);
 describe('basic', function() {
     it('new a wildodg()', function() {
         var ref = new Wilddog('https://test123.wilddogio.com');
