@@ -23,7 +23,7 @@
 // var webdriverio = require('webdriverio');
 // var assert = chai.assert;
 // var Wilddog = require('wilddog');
-
+this.timeout(10000);
 
 describe('basic', function() {
     it('new a wildodg()', function() {
