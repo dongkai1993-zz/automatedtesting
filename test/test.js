@@ -853,7 +853,7 @@ describe('Query(Methods)', function() {
                     assert.equal(child_changedState, 1);
                     assert.equal(child_removedState, 5);
                     done();
-                }, 1000))
+                }, 4000))
 
         });
 
