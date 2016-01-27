@@ -1,28 +1,3 @@
-// var webdriverio = require('webdriverio');
-// var  assert = require('assert');
-
-// describe('simple web test',function(){
-//     //this.timeout(99999999);
-//     before(function(done){
-//         client = webdriverio.remote({
-//             desiredCapabilities: {
-//                 browserName: 'chrome'
-//             }
-//         });
-//         client.init(done);
-//     })
-//     it("shoud open a simple page",function(done){
-//         client.url('http://localhost:9000/examples/simple.html')
-//         .getTitle().then(function(text){
-//             assert(text=='first simple test');
-//             done()
-//         })
-//     });
-// })
-
-// var webdriverio = require('webdriverio');
-// var assert = chai.assert;
-// var Wilddog = require('wilddog');
 
 describe('API',function(){
     this.timeout(20000);
