@@ -1,29 +1,39 @@
+if (typeof require != "undefined") {
+    var assert = require('chai').assert;
+    var Wilddog = require('wilddog');
+    // if (typeof __webpack_require__ != "undefined") {
+    //     var Wilddog = require("../../dist/lib/wilddog-web.js")
+    // } else {
+    //     var Wilddog = require("../../dist/lib/wilddog-node.js")
+    // }
+}
+
 describe('API', function() {
     this.timeout(20000);
     describe('basic', function() {
         it('new a wildodg()', function() {
-            var ref = new Wilddog('https://test123.wilddogio.com');
+            var ref = new Wilddog('https://dongkai.wilddogio.com');
             assert.isNotNull(ref);
         });
         it('child()', function() {
-            var ref = new Wilddog('https://test123.wilddogio.com');
+            var ref = new Wilddog('https://dongkai.wilddogio.com');
             assert.equal(ref.child('a/b/c').toString(), ref.child('a').child('b').child('c').toString());
         });
         it('parent()', function() {
-            var ref = new Wilddog('https://test123.wilddogio.com/a/b/c');
-            assert.equal(ref.parent().toString(), 'https://test123.wilddogio.com/a/b');
+            var ref = new Wilddog('https://dongkai.wilddogio.com/a/b/c');
+            assert.equal(ref.parent().toString(), 'https://dongkai.wilddogio.com/a/b');
         })
         it('root()', function() {
-            var ref = new Wilddog('https://test123.wilddogio.com/a/b/c');
-            assert.equal(ref.root().toString(), 'https://test123.wilddogio.com/');
+            var ref = new Wilddog('https://dongkai.wilddogio.com/a/b/c');
+            assert.equal(ref.root().toString(), 'https://dongkai.wilddogio.com/');
         });
         it('key()', function() {
-            var ref = new Wilddog('https://test123.wilddogio.com/a/b/c');
+            var ref = new Wilddog('https://dongkai.wilddogio.com/a/b/c');
             assert.equal(ref.key().toString(), 'c');
         });
         it('toString()', function() {
-            var ref = new Wilddog('https://test123.wilddogio.com/a/b/c');
-            assert.equal(ref.root().toString(), 'https://test123.wilddogio.com/');
+            var ref = new Wilddog('https://dongkai.wilddogio.com/a/b/c');
+            assert.equal(ref.root().toString(), 'https://dongkai.wilddogio.com/');
         });
         it('goOffline()', function(done) {
             var ref = new Wilddog('https://dongkai.wilddogio.com/test');
@@ -44,163 +54,338 @@ describe('API', function() {
 
     });
 
-    describe('auth', function() {
-        it('authWithCustomToken(token)', function(done) {
-            var ref = new Wilddog('https://dongkai.wilddogio.com');
-            var token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ2IjowLCJpYXQiOjE0OTk5OTk5OTksImQiOnsidWlkIjoic2ltcGxlbG9naW46MTQ1Mjc2MzE2OTc2MTU4NiIsInByb3ZpZGVyIjoicGFzc3dvcmQifX0.el8vvz_7RPizoPlfzlauKRyTwnOnNPdfUntEvQeyIzA';
-            ref.authWithCustomToken(token, function(err) {
-                assert.isNull(err);
-                assert.isNotNull(ref.getAuth());
-                done();
+    describe('acountManager', function() {
+        describe('', function() {
+            it('createUser()', function(done) {
+                var ref = new Wilddog('https://dongkai.wilddogio.com');
+                ref.createUser({
+                        email: 'createUser@ac.branch',
+                        password: '123456'
+                    },
+                    function(err, data) {
+                        assert.isNull(err);
+                        ref.authWithPassword({
+                                email: 'createUser@ac.branch',
+                                password: '123456'
+                            },
+                            function(err, data) {
+                                assert.isNull(err);
+                                ref.unauth();
+                                done();
+                            });
+                    });
             })
+        })
+        describe('', function() {
+            it('changePassword()', function(done) {
+                var ref = new Wilddog('https://dongkai.wilddogio.com');
+                ref.createUser({
+                        email: 'changePassword@ac.branch',
+                        password: '123456'
+                    },
+                    function(err, data) {
+                        assert.isNull(err);
+                        ref.changePassword({
+                                email: 'changePassword@ac.branch',
+                                oldPassword: '123456',
+                                newPassword: '123456789'
+                            },
+                            function(err) {
+                                assert.isNull(err);
+                                ref.authWithPassword({
+                                        email: 'changePassword@ac.branch',
+                                        password: '123456789'
+                                    },
+                                    function(err, data) {
+                                        assert.isNull(err);
+                                        ref.unauth();
+                                        done();
+                                    })
+                            })
 
-        });
-
-        it('authWithCustomToken(secretKey)', function(done) {
-            var ref = new Wilddog('https://dongkai.wilddogio.com');
-            var secretKey = 'ApfLnHCYekm3oo2FTix2ywFwxDWwYvWWs8fKulfZ';
-            ref.authWithCustomToken(secretKey, function(err) {
-                assert.isNull(err);
-                assert.isNotNull(ref.getAuth());
-                done();
+                    });
             })
+        })
+        describe('', function() {
+            it('changeEmail()', function(done) {
+                var ref = new Wilddog('https://dongkai.wilddogio.com');
+                ref.createUser({
+                        email: 'changeEmail@ac.branch',
+                        password: '123456'
+                    },
+                    function(err, data) {
+                        assert.isNull(err);
+                        ref.changeEmail({
+                                oldEmail: 'changeEmail@ac.branch',
+                                newEmail: 'newEmail@ac.branch',
+                                password: '123456'
+                            },
+                            function(err) {
+                                assert.isNull(err);
+                                ref.authWithPassword({
+                                        email: 'newEmail@ac.branch',
+                                        password: '123456'
+                                    },
+                                    function(err, data) {
+                                        assert.isNull(err);
+                                        ref.unauth();
+                                        done();
+                                    })
+                            })
 
-        });
+                    });
+            })
+        })
+        describe('', function() {
+            it('removeUser()', function(done) {
+                var ref = new Wilddog('https://dongkai.wilddogio.com');
+                ref.createUser({
+                        email: 'removeUser@ac.branch',
+                        password: '123456'
+                    },
+                    function(err, data) {
+                        assert.isNull(err);
+                        ref.removeUser({
+                                email: 'removeUser@ac.branch',
+                                password: '123456'
+                            },
+                            function(err) {
+                                assert.isNull(err);
+                                ref.authWithPassword({
+                                        email: 'removeUser@ac.branch',
+                                        password: '123456'
+                                    },
+                                    function(err, data) {
+                                        assert.isNotNull(err);
+                                        done();
+                                    })
+                            })
 
-        it('authAnonymously()', function(done) {
-            var ref = new Wilddog('https://dongkai.wilddogio.com');
-            ref.authAnonymously(
-                function(err, auth) {
-                    assert.isNull(err);
-                    assert.isNotNull(ref.getAuth());
-                    done();
-                });
-        });
+                    });
+            })
+        })
 
-        it('authWithPassword()', function(done) {
-            var ref = new Wilddog('https://dongkai.wilddogio.com');
-            ref.authWithPassword({
-                email: 'dongkai@wilddog.com',
-                password: '123456'
-            }, function(err, data) {
-                assert.isNull(err);
-                assert.isNotNull(ref.getAuth());
-                done();
-            });
-
-        });
-
-        it('authWithOAuthPopup()', function() {
-            var ref = new Wilddog('https://dongkai.wilddogio.com');
-
-        });
-
-        it('authWithOAuthRedirect()', function() {
-            var ref = new Wilddog('https://dongkai.wilddogio.com');
-
-        });
-
-        it('authWithOAuthToken()', function() {
-            var ref = new Wilddog('https://dongkai.wilddogio.com');
-
-        });
-
-        it('getAuth()', function(done) {
-            var ref = new Wilddog('https://dongkai.wilddogio.com');
-            var emailStr = 'dongkai@wilddog.com'
-            ref.authWithPassword({
-                email: emailStr,
-                password: '123456'
-            }, function(err) {
-                assert.isNull(err);
-                assert.equal(ref.getAuth().password.email, emailStr);
-                done();
-            });
-        });
-
-        // it('onAuth()',function(done){
+        // it('resetPassword()',function(done){
         //     var ref = new Wilddog('https://dongkai.wilddogio.com');
-        //     var state = 0;
-        //     var onAuth = new Promise(function(resolve,reject){
+        //     ref.createUser({email:'dongkai@wilddog.com',password:'123456'},
+        //         function(err,data){
+        //             assert.isNull(err);
+        //             ref.resetPassword({email:'dongkai@wilddog.com'},
+        //                 function(err){
+        //                     assert.isNull(err);
+        //                     done()
+        //                 });
 
-        //         ref.onAuth(function(authData){
-
-        //             if(state == 0){
-        //                 //assert()
-        //                 console.log(authData);
-        //                 console.log(0);
-
-        //             }
-        //             else if (state == 1){
-        //                 console.log(authData);
-        //                 console.log(1);
-        //             }
-        //             else if(state == 2){
-        //                 //
-        //                 console.log(authData);
-        //                 console.log(2);
-        //             }
-        //         })
-        //         resolve();
-        //     })
-        //     var authWithPassword = function(){
-
-        //         return new Promise(function(resolve,reject){
-
-
-        //         ref.authWithPassword({email:'dongkai@wilddog.com',password:'123456'},function(err){
-        //                 if(err){
-        //                     reject(err)
-        //                 }
-        //                 else{
-        //                     resolve();
-        //                 }
-
-        //             })
-        //             state =1 ;
-        //         })   
-        //     }
-        //     var unauth = function(){
-        //         return new Promise(function(resolve,reject){
-
-        //             ref.unauth();
-        //             state =2 ;
-        //             resolve();
-        //             done()
-        //         })  
-        //     } 
-        //     onAuth
-        //     .then(authWithPassword)
-        //     .then(unauth);
-
+        //         });
         // });
 
-        it('offAuth()', function() {
+        after(function() {
             var ref = new Wilddog('https://dongkai.wilddogio.com');
+            ref.removeUser({
+                email: 'createUser@ac.branch',
+                password: '123456'
+            }, function(err) {});
+            ref.removeUser({
+                email: 'changePassword@ac.branch',
+                password: '123456789'
+            }, function(err) {});
+            ref.removeUser({
+                email: 'newEmail@ac.branch',
+                password: '123456'
+            }, function(err) {});
+            ref.removeUser({
+                email: 'removeUser@ac.branch',
+                password: '123456'
+            }, function(err) {});
+            ref.removeUser({
+                email: 'dongkai@willdog.com',
+                password: '123456'
+            }, function(err) {});
 
         });
-
-        it('unauth()', function() {
-            var ref = new Wilddog('https://dongkai.wilddogio.com');
-            ref.authWithPassword({
-                    email: 'dongkai@wilddog.com',
-                    password: '123456'
-                },
-                function(err) {
+    });
+    describe('auth', function() {
+        describe('', function() {
+            it('authWithCustomToken(token)', function(done) {
+                var ref = new Wilddog('https://dongkai.wilddogio.com');
+                var token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ2IjowLCJpYXQiOjE0OTk5OTk5OTksImQiOnsidWlkIjoic2ltcGxlbG9naW46MTQ1Mjc2MzE2OTc2MTU4NiIsInByb3ZpZGVyIjoicGFzc3dvcmQifX0.el8vvz_7RPizoPlfzlauKRyTwnOnNPdfUntEvQeyIzA';
+                ref.authWithCustomToken(token, function(err) {
                     assert.isNull(err);
-                    assert.isNotNull(ref.getAuth());
+                    assert.equal(ref.getAuth().token, token);
                     ref.unauth();
-                    assert.isNull(ref.getAuth());
+                    done();
                 })
 
+            });
+        });
+        describe('', function() {
+            it('authWithCustomToken(secretKey)', function(done) {
+                var ref = new Wilddog('https://dongkai.wilddogio.com');
+                var secretKey = 'ApfLnHCYekm3oo2FTix2ywFwxDWwYvWWs8fKulfZ';
+                ref.authWithCustomToken(secretKey, function(err) {
+                    assert.isNull(err);
+                    assert.equal(ref.getAuth().token, secretKey);
+                    ref.unauth();
+                    done();
+                })
+
+            });
+        });
+        describe('', function() {
+            it('authAnonymously()', function(done) {
+                var ref = new Wilddog('https://dongkai.wilddogio.com');
+                ref.authAnonymously(
+                    function(err, auth) {
+                        assert.isNull(err);
+                        assert.isNotNull(ref.getAuth());
+                        ref.unauth();
+                        done();
+                    });
+            });
+        });
+        describe('', function() {
+            it('authWithPassword()', function(done) {
+                var ref = new Wilddog('https://dongkai.wilddogio.com');
+                ref.authWithPassword({
+                    email: 'dongkai@wilddog.com',
+                    password: '123456'
+                }, function(err, data) {
+                    assert.isNull(err);
+                    assert.equal(ref.getAuth().password.email, 'dongkai@wilddog.com');
+                    ref.unauth();
+                    done();
+                });
+
+            });
+        });
+        describe('', function() {
+            it('authWithOAuthPopup()', function() {
+                var ref = new Wilddog('https://dongkai.wilddogio.com');
+
+            });
+        });
+        describe('', function() {
+            it('authWithOAuthRedirect()', function() {
+                var ref = new Wilddog('https://dongkai.wilddogio.com');
+
+            });
+        });
+        describe('', function() {
+            it('getAuth()', function(done) {
+                var ref = new Wilddog('https://dongkai.wilddogio.com');
+                var emailStr = 'dongkai@wilddog.com'
+                ref.authWithPassword({
+                    email: emailStr,
+                    password: '123456'
+                }, function(err) {
+                    assert.isNull(err);
+                    assert.equal(ref.getAuth().password.email, emailStr);
+                    ref.unauth();
+                    done();
+                });
+            });
+        });
+        describe('', function() {
+            it('authWithOAuthToken()', function() {
+                var ref = new Wilddog('https://dongkai.wilddogio.com');
+
+            });
+
+        });
+        describe('', function() {
+            it('onAuth()', function(done) {
+                var ref = new Wilddog('https://dongkai.wilddogio.com');
+                var state = 0;
+                var callback = function(authData) {
+                    ++state;
+                    if (state == 1) {
+                        assert.isNull(authData);
+                    } else if (state == 2) {
+                        assert.equal(authData.password.email, 'dongkai@wilddog.com')
+                    } else if (state == 3) {
+                        assert.isNull(authData)
+                    }
+                }
+                var onAuth = new Promise(function(resolve, reject) {
+
+                    ref.onAuth(callback);
+                    resolve();
+                })
+                var authWithPassword = function() {
+
+                    return new Promise(function(resolve, reject) {
+
+
+                        ref.authWithPassword({ email: 'dongkai@wilddog.com', password: '123456' }, function(err) {
+                            if (err) {
+                                reject(err)
+                            } else {
+                                resolve();
+                            }
+
+                        })
+                    })
+                }
+                var unauth = function() {
+                    return new Promise(function(resolve, reject) {
+
+                        ref.unauth();
+                        ref.offAuth(callback);
+                        resolve();
+                        done();
+                    })
+                }
+                onAuth
+                    .then(authWithPassword)
+                    .then(unauth);
+
+            });
         });
 
+        describe('', function() {
+            it('offAuth()', function(done) {
+                var state = 0;
+                var ref = new Wilddog('https://dongkai.wilddogio.com');
+                var callback = function(authData) {
+                    state++;
+                }
+                ref.onAuth(callback);
+                ref.offAuth(callback);
+                ref.authWithPassword({
+                        email: 'dongkai@wilddog.com',
+                        password: '123456'
+                    },
+                    function(err) {
+                        assert.isNull(err);
+                        assert.equal(state, 1);
+                        done();
+                    })
+            });
+        });
+
+        describe('', function() {
+            it('unauth()', function(done) {
+                var ref = new Wilddog('https://dongkai.wilddogio.com');
+                ref.authWithPassword({
+                        email: 'dongkai@wilddog.com',
+                        password: '123456'
+                    },
+                    function(err) {
+                        assert.isNull(err);
+                        assert.isNotNull(ref.getAuth());
+                        ref.unauth();
+                        assert.isNull(ref.getAuth());
+                        done();
+                    })
+
+            });
+        });
     });
 
     describe('set()', function() {
 
         it('set(Number)', function(done) {
-            var ref = new Wilddog('https://test123.wilddogio.com/set/number');
+            var ref = new Wilddog('https://dongkai.wilddogio.com/set/number');
             var number = 46461345612;
             ref.set(number, function(err) {
                 assert.isNull(err);
@@ -214,7 +399,7 @@ describe('API', function() {
         });
 
         it('set(String)', function(done) {
-            var ref = new Wilddog('https://test123.wilddogio.com/set/String');
+            var ref = new Wilddog('https://dongkai.wilddogio.com/set/String');
             var value = '23sdsdfw#EWwerwefsdfsdf234fsfdsSSSSSd';
             ref.set(value, function(err) {
                 assert.isNull(err);
@@ -226,7 +411,7 @@ describe('API', function() {
         });
 
         it('set(Object)', function(done) {
-            var ref = new Wilddog('https://test123.wilddogio.com/set/Object');
+            var ref = new Wilddog('https://dongkai.wilddogio.com/set/Object');
             var value = {
                 "name": "test",
                 "id": 132213
@@ -254,7 +439,7 @@ describe('API', function() {
         });
 
         it('set(null)', function(done) {
-            var ref = new Wilddog('https://test123.wilddogio.com/set/null');
+            var ref = new Wilddog('https://dongkai.wilddogio.com/set/null');
             var value = null;
             ref.set(value, function(err) {
                 assert.isNull(err);
@@ -426,11 +611,11 @@ describe('API', function() {
             var count = 0;
             var i = false;
 
-            refMaxPriority.setWithPriority(valueMin, 1, isFinished());
-            refMinPriority.setWithPriority(valueMax, 2, isFinished());
+            refMaxPriority.setWithPriority(valueMax, 2, isFinished());
+            refMinPriority.setWithPriority(valueMin, 1, isFinished());
 
             function isFinished() {
-                count += 1;
+                ++count;
                 if (count == 2) {
                     refSetWithPriority.once('value', function(snapshot) {
                         snapshot.forEach(function(snap) {
@@ -619,152 +804,9 @@ describe('API', function() {
 
     });
 
-    describe('acountManager', function() {
-        it('createUser()', function(done) {
-            var ref = new Wilddog('https://dongkai.wilddogio.com');
-            ref.createUser({
-                    email: 'createUser@ac.branch',
-                    password: '123456'
-                },
-                function(err, data) {
-                    assert.isNull(err);
-                    ref.authWithPassword({
-                            email: 'createUser@ac.branch',
-                            password: '123456'
-                        },
-                        function(err, data) {
-                            assert.isNull(err);
-                            done();
-                        });
-                });
-        });
-
-        it('changePassword()', function(done) {
-            var ref = new Wilddog('https://dongkai.wilddogio.com');
-            ref.createUser({
-                    email: 'changePassword@ac.branch',
-                    password: '123456'
-                },
-                function(err, data) {
-                    assert.isNull(err);
-                    ref.changePassword({
-                            email: 'changePassword@ac.branch',
-                            oldPassword: '123456',
-                            newPassword: '123456789'
-                        },
-                        function(err) {
-                            assert.isNull(err);
-                            ref.authWithPassword({
-                                    email: 'changePassword@ac.branch',
-                                    password: '123456789'
-                                },
-                                function(err, data) {
-                                    assert.isNull(err);
-                                    done();
-                                })
-                        })
-
-                });
-        });
-
-        it('changeEmail()', function(done) {
-            var ref = new Wilddog('https://dongkai.wilddogio.com');
-            ref.createUser({
-                    email: 'changeEmail@ac.branch',
-                    password: '123456'
-                },
-                function(err, data) {
-                    assert.isNull(err);
-                    ref.changeEmail({
-                            oldEmail: 'changeEmail@ac.branch',
-                            newEmail: 'newEmail@ac.branch',
-                            password: '123456'
-                        },
-                        function(err) {
-                            assert.isNull(err);
-                            ref.authWithPassword({
-                                    email: 'newEmail@ac.branch',
-                                    password: '123456'
-                                },
-                                function(err, data) {
-                                    assert.isNull(err);
-                                    done();
-                                })
-                        })
-
-                });
-        });
-
-        it('removeUser()', function(done) {
-            var ref = new Wilddog('https://dongkai.wilddogio.com');
-            ref.createUser({
-                    email: 'removeUser@ac.branch',
-                    password: '123456'
-                },
-                function(err, data) {
-                    assert.isNull(err);
-                    ref.removeUser({
-                            email: 'removeUser@ac.branch',
-                            password: '123456'
-                        },
-                        function(err) {
-                            assert.isNull(err);
-                            ref.authWithPassword({
-                                    email: 'removeUser@ac.branch',
-                                    password: '123456'
-                                },
-                                function(err, data) {
-                                    assert.isNotNull(err);
-                                    done();
-                                })
-                        })
-
-                });
-        });
-
-        // it('resetPassword()',function(done){
-        //     var ref = new Wilddog('https://dongkai.wilddogio.com');
-        //     ref.createUser({email:'dongkai@wilddog.com',password:'123456'},
-        //         function(err,data){
-        //             assert.isNull(err);
-        //             ref.resetPassword({email:'dongkai@wilddog.com'},
-        //                 function(err){
-        //                     assert.isNull(err);
-        //                     done()
-        //                 });
-
-        //         });
-        // });
-
-        after(function() {
-            var ref = new Wilddog('https://dongkai.wilddogio.com');
-            ref.removeUser({
-                email: 'createUser@ac.branch',
-                password: '123456'
-            }, function(err) {});
-            ref.removeUser({
-                email: 'changePassword@ac.branch',
-                password: '123456789'
-            }, function(err) {});
-            ref.removeUser({
-                email: 'newEmail@ac.branch',
-                password: '123456'
-            }, function(err) {});
-            ref.removeUser({
-                email: 'removeUser@ac.branch',
-                password: '123456'
-            }, function(err) {});
-            ref.removeUser({
-                email: 'dongkai@willdog.com',
-                password: '123456'
-            }, function(err) {});
-
-        });
-    });
-
     describe('Query(Methods)', function() {
         var ref = new Wilddog('https://dongkai.wilddogio.com/Query');
-        ref.update({
+        ref.set({
             'men': {
                 'faf': 5445,
                 'dsa': 42545,
@@ -786,27 +828,27 @@ describe('API', function() {
                 var ref = new Wilddog('https://dongkai.wilddogio.com/Query/men');
                 var onSet = new Promise(function(resolve, reject) {
                     ref.on('child_added', function() {
-                        child_addedState += 1;
+                        ++child_addedState;
                     });
                     ref.on('child_changed', function() {
-                        child_changedState += 1;
+                        ++child_changedState;
                     });
                     ref.on('child_removed', function() {
-                        child_removedState += 1;
+                        ++child_removedState;
                     });
                     ref.on('value', function(data) {
-                        valueState += 1;
+                        ++valueState;
                     });
                     resolve();
                 })
 
                 var dataTest = function() {
                     return new Promise(function(resolve, reject) {
-                        ref.update({
+                        ref.set({
                             'test': 32132
                         }, function(err) {
                             assert.isNull(err);
-                            ref.update({
+                            ref.set({
                                 'test': 42424
                             }, function(err) {
                                 assert.isNull(err);
@@ -823,11 +865,11 @@ describe('API', function() {
                     .then(dataTest)
                     .then(setTimeout(function() {
                         assert.equal(valueState, 3);
-                        assert.equal(child_addedState, 5);
+                        assert.equal(child_addedState, 1);
                         assert.equal(child_changedState, 1);
-                        assert.equal(child_removedState, 5);
+                        assert.equal(child_removedState, 1);
                         done();
-                    }, 4000))
+                    }, 1000))
 
             });
 
@@ -846,35 +888,35 @@ describe('API', function() {
                 var ref = new Wilddog('https://dongkai.wilddogio.com/Query/men');
                 var onceSet = new Promise(function(resolve, reject) {
                     ref.once('child_added', function() {
-                        child_addedState += 1;
+                        ++child_addedState;
                     });
                     ref.once('child_changed', function() {
-                        child_changedState += 1;
+                        ++child_changedState;
                     });
                     ref.once('child_removed', function() {
-                        child_removedState += 1;
+                        ++child_removedState;
                     });
                     ref.once('value', function(data) {
-                        valueState += 1;
+                        ++valueState;
                     });
                     resolve();
                 })
                 var dataTest = function() {
                     return new Promise(function(resolve, reject) {
-                        ref.update({
+                        ref.set({
                             'test': 32132
                         }, function(err) {
                             assert.isNull(err);
-                            ref.update({
+                            ref.set({
                                 'test': 42424
                             }, function(err) {
                                 assert.isNull(err);
                                 ref.remove(function(err) {
                                     assert.isNull(err);
                                     assert.equal(valueState, 4);
-                                    assert.equal(child_addedState, 6);
+                                    assert.equal(child_addedState, 2);
                                     assert.equal(child_changedState, 2);
-                                    assert.equal(child_removedState, 6);
+                                    assert.equal(child_removedState, 2);
                                     resolve();
                                     done();
                                 })
@@ -889,7 +931,7 @@ describe('API', function() {
         describe('', function() {
             it('off()', function(done) {
                 var ref = new Wilddog('https://dongkai.wilddogio.com/Query');
-                ref.update({
+                ref.set({
                         'men': {
                             'faf': 5445,
                             'dsa': 42545,
@@ -904,9 +946,9 @@ describe('API', function() {
                     function(err) {
                         assert.isNull(err);
                         assert.equal(valueState, 4);
-                        assert.equal(child_addedState, 6);
+                        assert.equal(child_addedState, 2);
                         assert.equal(child_changedState, 2);
-                        assert.equal(child_removedState, 6);
+                        assert.equal(child_removedState, 2);
                         done();
                     });
 
@@ -1038,13 +1080,13 @@ describe('API', function() {
 
         });
 
-        // describe('',function(){
-        //     it('ref()',function(done){
-        //         var query = ref.once('value',function(snap){})
-        //         console.log(query.ref());
-        //         done();
-        //     })
-        // });
+        describe('', function() {
+            it('ref()', function(done) {
+                var query = ref.limitToLast(10);
+                assert.equal(query.ref().toString(), ref.toString());
+                done();
+            })
+        });
     });
 
     describe('Wilddog.onDisconnect(Methods)', function() {
@@ -1065,87 +1107,59 @@ describe('API', function() {
             })
         });
 
-        it('limitToLast(err)', function(done) {
-            var ref = new Wilddog('https://dongkai.wilddogio.com/limitToLast');
-            var arr = [];
-            var count = 0;
-            var expectArr = [];
-            var onPush = new Promise(function(resolve, reject) {
-                ref.orderByChild('timestamp').limitToLast(10).on('child_added', function(dataSnapshot) {
-                    arr.push(dataSnapshot.val().timestamp);
-                });
-                ref.orderByChild('timestamp').limitToLast(10).on('child_removed', function(dataSnapshot) {
-                    arr.shift();
-                });
-                for (var i = 0; i < 12; i++) {
-                    setTimeout(function() {
-                        ref.push({
-                            timestamp: Date.now()
-                        }, function(snap) {
-                            count += 1;
-                            if (count == 12) {
-                                resolve();
-                            }
-                        });
-                    }, 200)
-                };
-            })
-            var pushTime = function() {
-                return new Promise(function(resolve, reject) {
-                    var ref = new Wilddog('https://dongkai.wilddogio.com/limitToLast');
-                    ref.orderByChild('timestamp').limitToLast(10).once('value', function(dataSnapshot) {
-                        dataSnapshot.forEach(function(snap) {
-                            expectArr.push(snap.val().timestamp);
-                        })
-                        resolve();
-                    })
-                })
-            }
+        // it('limitToLast(err)', function(done) {
+        //     var ref = new Wilddog('https://dongkai.wilddogio.com/limitToLast');
+        //     var arr = [];
+        //     var count = 0;
+        //     var expectArr = [];
+        //     var onPush = new Promise(function(resolve, reject) {
+        //         ref.orderByChild('timestamp').limitToLast(10).on('child_added', function(dataSnapshot) {
+        //             arr.push(dataSnapshot.val().timestamp);
+        //         });
+        //         ref.orderByChild('timestamp').limitToLast(10).on('child_removed', function(dataSnapshot) {
+        //             arr.shift();
+        //         });
+        //         for (var i = 0; i < 12; i++) {
+        //             setTimeout(function() {
+        //                 ref.push({
+        //                     timestamp: Date.now()
+        //                 }, function(snap) {
+        //                     count += 1;
+        //                     if (count == 12) {
+        //                         resolve();
+        //                     }
+        //                 });
+        //             }, 200)
+        //         };
+        //     })
+        //     var pushTime = function() {
+        //         return new Promise(function(resolve, reject) {
+        //             var ref = new Wilddog('https://dongkai.wilddogio.com/limitToLast');
+        //             ref.orderByChild('timestamp').limitToLast(10).once('value', function(dataSnapshot) {
+        //                 dataSnapshot.forEach(function(snap) {
+        //                     expectArr.push(snap.val().timestamp);
+        //                 })
+        //                 resolve();
+        //             })
+        //         })
+        //     }
 
-            onPush
-                .then(function() {
-                    pushTime()
-                        .then(function() {
-                            for (var i = 0; i < arr.length; i++) {
-                                assert.equal(arr[i], expectArr[i]);
-                            };
-                            done();
-                        });
-                })
+        //     onPush
+        //         .then(function() {
+        //             pushTime()
+        //                 .then(function() {
+        //                     for (var i = 0; i < arr.length; i++) {
+        //                         assert.equal(arr[i], expectArr[i]);
+        //                     };
+        //                     done();
+        //                 });
+        //         })
 
-        });
+        // });
         after(function() {
             var ref = new Wilddog('https://dongkai.wilddogio.com/limitToLast');
             ref.off();
             ref.remove();
         })
     });
-
-    // describe('shishiliaotian', function() {
-    //         it('getMessage', function(done) {
-    //             var options = {
-    //                 desiredCapabilities: {
-    //                     browserName: 'chrome'
-    //                 }
-    //             };
-    //             var input = 'asdsadasd';
-
-    //             webdriverio
-    //                 .remote(options)
-    //                 .init()
-    //                 .url('https://www.wilddog.com/examples/chat')
-    //                 .addValue('#m', input)
-    //                 .click('button.ui-btn-prop-normal')
-    //                 .getText('#messages').then(function(text) {
-    //                     console.log(text);
-    //                     webdriverio
-    //                         .remote(options)
-    //                         .init()
-    //                         .url('https://www.wilddog.com/examples/chat')
-    //                         .getText('#messages').then(function(text) {
-    //                             assert.equal(text, input);
-    //                         })
-    //                 });
-    //         })
-    //     })
 })

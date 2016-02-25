@@ -13,12 +13,16 @@
   "license": "ISC",
   "devDependencies": {
     "chai": "^3.4.1",
+    "gulp": "^3.9.1",
+    "gulp-mocha": "^2.2.0",
     "karma": "^0.13.19",
     "karma-chai": "^0.1.0",
-    "karma-chrome-launcher": "^0.2.2",
+    "karma-chrome-launcher": "^0.1.7",
     "karma-mocha": "^0.2.1",
+    "karma-webpack": "^1.7.0",
     "mocha": "^2.3.4",
-    "karma-chrome-launcher": "^0.1.7"
+    "webpack": "^1.12.14",
+    "wilddog": "^0.6.0"
   },
   "dependencies": {
     "gulp": "^3.9.0"
