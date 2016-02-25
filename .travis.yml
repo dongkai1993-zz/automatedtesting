@@ -8,4 +8,4 @@ before_install:
 install:
 - npm install
 script:
-- karma start test/karma.webpackConf.js
+- karma start test/karma.webTestConf.js
