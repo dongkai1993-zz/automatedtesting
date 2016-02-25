@@ -9,7 +9,7 @@ if (typeof require != "undefined") {
 }
 
 describe('API', function() {
-    this.timeout(20000);
+    this.timeout(30000);
     describe('basic', function() {
         it('new a wildodg()', function() {
             var ref = new Wilddog('https://dongkai.wilddogio.com');
@@ -35,18 +35,18 @@ describe('API', function() {
             var ref = new Wilddog('https://dongkai.wilddogio.com/a/b/c');
             assert.equal(ref.root().toString(), 'https://dongkai.wilddogio.com/');
         });
-        // it('goOffline()', function(done) {
-        //     var ref = new Wilddog('https://dongkai.wilddogio.com/test');
-        //     ref.set(44521, function(err) {
-        //         assert.isNull(err);
-        //         ref.once('value', function(sn) {
-        //             assert.equal(sn.val(), 44521);
-        //             Wilddog.goOffline();
-        //             done();
+        it('goOffline()', function(done) {
+            var ref = new Wilddog('https://dongkai.wilddogio.com/test');
+            ref.set(44521, function(err) {
+                assert.isNull(err);
+                ref.once('value', function(sn) {
+                    assert.equal(sn.val(), 44521);
+                    Wilddog.goOffline();
+                    done();
 
-        //         })
-        //     });
-        // });
+                })
+            });
+        });
 
         after(function() {
             Wilddog.goOnline();
