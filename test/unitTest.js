@@ -827,16 +827,16 @@ describe('API', function() {
                 var ref = new Wilddog('https://dongkai.wilddogio.com/Query/men');
                 var onSet = new Promise(function(resolve, reject) {
                     ref.on('child_added', function() {
-                        ++child_addedState;
+                        child_addedState++;
                     });
                     ref.on('child_changed', function() {
-                        ++child_changedState;
+                        child_changedState++;
                     });
                     ref.on('child_removed', function() {
-                        ++child_removedState;
+                        child_removedState++;
                     });
                     ref.on('value', function(data) {
-                        ++valueState;
+                        valueState++;
                     });
                     resolve();
                 })
