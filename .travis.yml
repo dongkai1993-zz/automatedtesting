@@ -9,5 +9,3 @@ install:
 - npm install
 script:
 - gulp test:webpack
-- gulp test:webunit
-- gulp test:nodeunit
