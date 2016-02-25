@@ -8,4 +8,6 @@ before_install:
 install:
 - npm install
 script:
-- gulp testKarma
+- gulp test:webpack
+- gulp test:webunit
+- gulp test:nodeunit
