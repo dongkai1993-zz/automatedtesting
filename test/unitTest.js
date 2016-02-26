@@ -1,9 +1,9 @@
 if (typeof require != "undefined") {
     var assert = require('chai').assert;
     if (typeof __webpack_require__ != "undefined") {
-        var Wilddog = require("../node_modules/lib/wilddog-web.js")
+        var Wilddog = require("wilddog")
     } else {
-        var Wilddog = require("../node_modules/lib/wilddog-node.js")
+        var Wilddog = require("wilddog")
     }
 }
 
