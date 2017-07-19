@@ -7,7 +7,7 @@ if (typeof require != "undefined") {
     }
 }
 
-describe('API', function() {
+describe('API-test', function() {
     this.timeout(30000);
     describe('basic', function() {
         it('new a wildodg()', function() {
